@@ -215,7 +215,8 @@ public:
     virtual void startFix(const LocPosMode& fixCriteria, LocApiResponse* adapterResponse);
     virtual void stopFix(LocApiResponse* adapterResponse);
     virtual void deleteAidingData(const GnssAidingData& data, LocApiResponse* adapterResponse);
-    virtual void injectPosition(double latitude, double longitude, float accuracy);
+    virtual void injectPosition(double latitude, double longitude, float accuracy,
+            bool onDemandCpi);
     virtual void injectPosition(const GnssLocationInfoNotification &locationInfo,
             bool onDemandCpi=false);
     virtual void injectPosition(const Location& location, bool onDemandCpi);
@@ -328,6 +329,10 @@ public:
     virtual void configMinGpsWeek(uint16_t minGpsWeek,
                                   LocApiResponse* adapterResponse=nullptr);
     virtual void getMinGpsWeek(uint32_t sessionId, LocApiResponse* adapterResponse);
+
+    virtual LocationError setParameterSync(const GnssConfig & gnssConfig);
+    virtual void getParameter(uint32_t sessionId, GnssConfigFlagsMask flags,
+                              LocApiResponse* adapterResponse=nullptr);
 };
 
 typedef LocApiBase* (getLocApi_t)(LOC_API_ADAPTER_EVENT_MASK_T exMask,

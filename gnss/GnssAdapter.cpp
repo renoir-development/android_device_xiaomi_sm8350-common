@@ -98,6 +98,7 @@ GnssAdapter::GnssAdapter() :
     mOdcpiRequestActive(false),
     mOdcpiTimer(this),
     mOdcpiRequest(),
+    mCallbackPriority(OdcpiPrioritytype::ODCPI_HANDLER_PRIORITY_LOW),
     mSystemStatus(SystemStatus::getInstance(mMsgTask)),
     mServerUrl(":"),
     mXtraObserver(mSystemStatus->getOsObserver(), mMsgTask),
@@ -254,6 +255,10 @@ GnssAdapter::convertLocation(Location& out, const UlpLocation& ulpLocation,
     if (GPS_LOCATION_EXTENDED_HAS_BEARING_UNC & locationExtended.flags) {
         out.flags |= LOCATION_HAS_BEARING_ACCURACY_BIT;
         out.bearingAccuracy = locationExtended.bearing_unc;
+    }
+    if (GPS_LOCATION_EXTENDED_HAS_CONFORMITY_INDEX & locationExtended.flags) {
+        out.flags |= LOCATION_HAS_CONFORMITY_INDEX_BIT;
+        out.conformityIndex = locationExtended.conformityIndex;
     }
     out.timestamp = ulpLocation.gpsLocation.timestamp;
     if (LOC_POS_TECH_MASK_SATELLITE & techMask) {
@@ -1194,11 +1199,23 @@ std::vector<LocationError> GnssAdapter::gnssUpdateConfig(const std::string& oldM
         }
         index++;
     }
+
+    if (gnssConfigRequested.flags & GNSS_CONFIG_FLAGS_MIN_SV_ELEVATION_BIT) {
+        GnssConfig gnssConfig = {};
+        gnssConfig.flags = GNSS_CONFIG_FLAGS_MIN_SV_ELEVATION_BIT;
+        gnssConfig.minSvElevation = gnssConfigRequested.minSvElevation;
+        err = mLocApi->setParameterSync(gnssConfig);
+        if (index < count) {
+            errsList[index] = err;
+        }
+        index++;
+    }
+
     return errsList;
 }
 
 uint32_t*
-GnssAdapter::gnssUpdateConfigCommand(GnssConfig config)
+GnssAdapter::gnssUpdateConfigCommand(const GnssConfig& config)
 {
     // count the number of bits set
     GnssConfigFlagsMask flagsCopy = config.flags;
@@ -1273,6 +1290,7 @@ GnssAdapter::gnssUpdateConfigCommand(GnssConfig config)
             sessionIds.assign(mIds, mIds + mCount);
             std::vector<LocationError> errs(mCount, LOCATION_ERROR_SUCCESS);
             int index = 0;
+            bool needSuspendResume = false;
 
             if (gnssConfigRequested.flags & GNSS_CONFIG_FLAGS_GPS_LOCK_VALID_BIT) {
                 GnssConfigGpsLock newGpsLock = gnssConfigRequested.gpsLock;
@@ -1372,6 +1390,14 @@ GnssAdapter::gnssUpdateConfigCommand(GnssConfig config)
                 index++;
             }
 
+            if (gnssConfigRequested.flags & GNSS_CONFIG_FLAGS_MIN_SV_ELEVATION_BIT) {
+                needSuspendResume = true;
+                index++;
+            }
+
+            if (needSuspendResume == true) {
+                mAdapter.suspendSessions();
+            }
             LocApiCollectiveResponse *configCollectiveResponse = new LocApiCollectiveResponse(
                     *adapter.getContext(),
                     [&adapter, sessionIds, countOfConfigs] (std::vector<LocationError> errs) {
@@ -1388,6 +1414,10 @@ GnssAdapter::gnssUpdateConfigCommand(GnssConfig config)
 
                 configCollectiveResponse->returnToSender(errsList);
             }));
+
+            if (needSuspendResume == true) {
+                mAdapter.restartSessions();
+            }
         }
     };
 
@@ -1605,7 +1635,7 @@ GnssAdapter::gnssGetConfigCommand(GnssConfigFlagsMask configMask) {
             }
             if (mConfigMask & GNSS_CONFIG_FLAGS_ROBUST_LOCATION_BIT) {
                 uint32_t sessionId = *(mIds+index);
-                 LocApiResponse* locApiResponse =
+                LocApiResponse* locApiResponse =
                         new LocApiResponse(*mAdapter.getContext(),
                                            [this, sessionId] (LocationError err) {
                                            mAdapter.reportResponse(err, sessionId);});
@@ -1628,6 +1658,21 @@ GnssAdapter::gnssGetConfigCommand(GnssConfigFlagsMask configMask) {
                     mAdapter.reportResponse(LOCATION_ERROR_GENERAL_FAILURE, sessionId);
                 } else {
                    mApi.getMinGpsWeek(sessionId, locApiResponse);
+                }
+            }
+
+            if (mConfigMask & GNSS_CONFIG_FLAGS_MIN_SV_ELEVATION_BIT) {
+                uint32_t sessionId = *(mIds+index);
+                LocApiResponse* locApiResponse =
+                        new LocApiResponse(*mAdapter.getContext(),
+                                           [this, sessionId] (LocationError err) {
+                                           mAdapter.reportResponse(err, sessionId);});
+                if (!locApiResponse) {
+                    LOC_LOGe("memory alloc failed");
+                    mAdapter.reportResponse(LOCATION_ERROR_GENERAL_FAILURE, sessionId);
+                } else {
+                    mApi.getParameter(sessionId, GNSS_CONFIG_FLAGS_MIN_SV_ELEVATION_BIT,
+                                      locApiResponse);
                 }
             }
 
@@ -1933,10 +1978,10 @@ GnssAdapter::gnssSvTypeConfigUpdate(bool sendReset)
             mGnssSvIdConfig.sbasBlacklistSvMask, mGnssSvIdConfig.navicBlacklistSvMask);
 
     LOC_LOGd("blacklist bds 0x%" PRIx64 ", glo 0x%" PRIx64
-            ", qzss 0x%" PRIx64 ", gal 0x%" PRIx64 ", sbas 0x%" PRIx64,
+            ", qzss 0x%" PRIx64 ", gal 0x%" PRIx64 ", sbas 0x%" PRIx64 ", Navic 0x%" PRIx64,
             mGnssSvIdConfig.bdsBlacklistSvMask, mGnssSvIdConfig.gloBlacklistSvMask,
             mGnssSvIdConfig.qzssBlacklistSvMask, mGnssSvIdConfig.galBlacklistSvMask,
-            mGnssSvIdConfig.sbasBlacklistSvMask);
+            mGnssSvIdConfig.sbasBlacklistSvMask, mGnssSvIdConfig.navicBlacklistSvMask);
 
     if (mGnssSvTypeConfig.size == sizeof(mGnssSvTypeConfig)) {
 
@@ -2153,35 +2198,38 @@ GnssAdapter::injectLocationCommand(double latitude, double longitude, float accu
         double mLatitude;
         double mLongitude;
         float mAccuracy;
+        bool mOnDemandCpi;
         inline MsgInjectLocation(LocApiBase& api,
                                  ContextBase& context,
                                  BlockCPIInfo& blockCPIInfo,
                                  double latitude,
                                  double longitude,
-                                 float accuracy) :
+                                 float accuracy,
+                                 bool onDemandCpi) :
             LocMsg(),
             mApi(api),
             mContext(context),
             mBlockCPI(blockCPIInfo),
             mLatitude(latitude),
             mLongitude(longitude),
-            mAccuracy(accuracy) {}
+            mAccuracy(accuracy),
+            mOnDemandCpi(onDemandCpi) {}
         inline virtual void proc() const {
             if ((uptimeMillis() <= mBlockCPI.blockedTillTsMs) &&
                 (fabs(mLatitude-mBlockCPI.latitude) <= mBlockCPI.latLonDiffThreshold) &&
                 (fabs(mLongitude-mBlockCPI.longitude) <= mBlockCPI.latLonDiffThreshold)) {
 
-                LOC_LOGD("%s]: positon injeciton blocked: lat: %f, lon: %f, accuracy: %f",
+                LOC_LOGD("%s]: positon injection blocked: lat: %f, lon: %f, accuracy: %f",
                          __func__, mLatitude, mLongitude, mAccuracy);
 
             } else {
-                mApi.injectPosition(mLatitude, mLongitude, mAccuracy);
+                mApi.injectPosition(mLatitude, mLongitude, mAccuracy, mOnDemandCpi);
             }
         }
     };
 
     sendMsg(new MsgInjectLocation(*mLocApi, *mContext, mBlockCPIInfo,
-                                  latitude, longitude, accuracy));
+                                  latitude, longitude, accuracy, mOdcpiRequestActive));
 }
 
 void
@@ -2479,6 +2527,12 @@ GnssAdapter::restartSessions(bool modemSSR)
     // SPE will be restarted now, so set this variable to false.
     mSPEAlreadyRunningAtHighestInterval = false;
 
+    if (false == mTimeBasedTrackingSessions.empty()) {
+        // inform engine hub that GNSS session is about to start
+        mEngHubProxy->gnssSetFixMode(mLocPositionMode);
+        mEngHubProxy->gnssStartFix();
+    }
+
     checkAndRestartSPESession();
 }
 
@@ -2597,7 +2651,8 @@ GnssAdapter::hasCallbacksToStartTracking(LocationAPI* client)
     auto it = mClientData.find(client);
     if (it != mClientData.end()) {
         if (it->second.trackingCb || it->second.gnssLocationInfoCb ||
-            it->second.engineLocationsInfoCb || it->second.gnssMeasurementsCb) {
+                it->second.engineLocationsInfoCb || it->second.gnssMeasurementsCb ||
+                it->second.gnssDataCb || it->second.gnssSvCb || it->second.gnssNmeaCb) {
             allowed = true;
         } else {
             LOC_LOGi("missing right callback to start tracking")
@@ -2884,10 +2939,10 @@ GnssAdapter::startTimeBasedTracking(LocationAPI* client, uint32_t sessionId,
 
     LocPosMode locPosMode = {};
     convertOptions(locPosMode, trackingOptions);
-    //Update Position mode parameters
+    // save position mode parameters
     setLocPositionMode(locPosMode);
     // inform engine hub that GNSS session is about to start
-    mEngHubProxy->gnssSetFixMode(locPosMode);
+    mEngHubProxy->gnssSetFixMode(mLocPositionMode);
     mEngHubProxy->gnssStartFix();
 
     // want to run SPE session at a fixed min interval in some automotive scenarios
@@ -2916,9 +2971,11 @@ GnssAdapter::updateTracking(LocationAPI* client, uint32_t sessionId,
 {
     LocPosMode locPosMode = {};
     convertOptions(locPosMode, updatedOptions);
+    // save position mode parameters
+    setLocPositionMode(locPosMode);
 
     // inform engine hub that GNSS session is about to start
-    mEngHubProxy->gnssSetFixMode(locPosMode);
+    mEngHubProxy->gnssSetFixMode(mLocPositionMode);
     mEngHubProxy->gnssStartFix();
 
     // want to run SPE session at a fixed min interval in some automotive scenarios
@@ -4488,8 +4545,12 @@ void GnssAdapter::requestOdcpi(const OdcpiRequestInfo& request)
         // the request is being stopped, but allow timer to expire first
         // before stopping the timer just in case more ODCPI requests come
         // to avoid spamming more odcpi requests to the framework
-        } else {
+        } else if (ODCPI_REQUEST_TYPE_STOP == request.type) {
+            LOC_LOGd("request: type %d, isEmergency %d", request.type, request.isEmergencyMode);
+            mOdcpiRequestCb(request);
             mOdcpiRequestActive = false;
+        } else {
+            LOC_LOGE("Invalid ODCPI request type..");
         }
     } else {
         LOC_LOGw("ODCPI request not supported");
@@ -4518,31 +4579,38 @@ bool GnssAdapter::reportGnssAdditionalSystemInfoEvent(
     return true;
 }
 
-void GnssAdapter::initOdcpiCommand(const OdcpiRequestCallback& callback)
+void GnssAdapter::initOdcpiCommand(const OdcpiRequestCallback& callback,
+            OdcpiPrioritytype priority)
 {
     struct MsgInitOdcpi : public LocMsg {
         GnssAdapter& mAdapter;
         OdcpiRequestCallback mOdcpiCb;
+        OdcpiPrioritytype mPriority;
         inline MsgInitOdcpi(GnssAdapter& adapter,
-                const OdcpiRequestCallback& callback) :
+                const OdcpiRequestCallback& callback,
+                OdcpiPrioritytype priority) :
                 LocMsg(),
                 mAdapter(adapter),
-                mOdcpiCb(callback) {}
+                mOdcpiCb(callback), mPriority(priority){}
         inline virtual void proc() const {
-            mAdapter.initOdcpi(mOdcpiCb);
+            mAdapter.initOdcpi(mOdcpiCb, mPriority);
         }
     };
 
-    sendMsg(new MsgInitOdcpi(*this, callback));
+    sendMsg(new MsgInitOdcpi(*this, callback, priority));
 }
 
-void GnssAdapter::initOdcpi(const OdcpiRequestCallback& callback)
+void GnssAdapter::initOdcpi(const OdcpiRequestCallback& callback,
+            OdcpiPrioritytype priority)
 {
-    mOdcpiRequestCb = callback;
-
-    /* Register for WIFI request */
-    updateEvtMask(LOC_API_ADAPTER_BIT_REQUEST_WIFI,
-            LOC_REGISTRATION_MASK_ENABLED);
+    LOC_LOGd("In priority: %d, Curr priority: %d", priority, mCallbackPriority);
+    if (priority >= mCallbackPriority) {
+        mOdcpiRequestCb = callback;
+        mCallbackPriority = priority;
+        /* Register for WIFI request */
+        updateEvtMask(LOC_API_ADAPTER_BIT_REQUEST_WIFI,
+                LOC_REGISTRATION_MASK_ENABLED);
+    }
 }
 
 void GnssAdapter::injectOdcpiCommand(const Location& location)
