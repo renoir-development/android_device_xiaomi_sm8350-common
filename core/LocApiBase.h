@@ -90,6 +90,8 @@ public:
     inline LocApiProxyBase() {}
     inline virtual ~LocApiProxyBase() {}
     inline virtual void* getSibling2() { return NULL; }
+    inline virtual double getGloRfLoss(uint32_t left,
+            uint32_t center, uint32_t right, uint8_t gloFrequency) { return 0.0; }
 };
 
 class LocApiBase {
@@ -254,7 +256,8 @@ public:
     virtual LocationError setXtraVersionCheckSync(uint32_t check);
     /* Requests for SV/Constellation Control */
     virtual LocationError setBlacklistSvSync(const GnssSvIdConfig& config);
-    virtual void setBlacklistSv(const GnssSvIdConfig& config);
+    virtual void setBlacklistSv(const GnssSvIdConfig& config,
+                                LocApiResponse *adapterResponse=nullptr);
     virtual void getBlacklistSv();
     virtual void setConstellationControl(const GnssSvTypeConfig& config,
                                          LocApiResponse *adapterResponse=nullptr);
@@ -325,6 +328,11 @@ public:
     virtual LocationError setParameterSync(const GnssConfig & gnssConfig);
     virtual void getParameter(uint32_t sessionId, GnssConfigFlagsMask flags,
                               LocApiResponse* adapterResponse=nullptr);
+
+    virtual void configConstellationMultiBand(const GnssSvTypeConfig& secondaryBandConfig,
+                                              LocApiResponse* adapterResponse=nullptr);
+    virtual void getConstellationMultiBandConfig(uint32_t sessionId,
+                                        LocApiResponse* adapterResponse=nullptr);
 };
 
 typedef LocApiBase* (getLocApi_t)(LOC_API_ADAPTER_EVENT_MASK_T exMask,
