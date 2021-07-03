@@ -84,6 +84,9 @@ DEVICE_MANIFEST_FILE := \
     $(COMMON_PATH)/hidl/manifest_lineage.xml \
     $(COMMON_PATH)/hidl/manifest_xiaomi.xml
 
+ODM_MANIFEST_SKUS += nfc
+ODM_MANIFEST_NFC_FILES := $(COMMON_PATH)/hidl/manifest_nfc.xml
+
 # Init
 TARGET_INIT_VENDOR_LIB ?= //$(COMMON_PATH):init_xiaomi_lahaina
 TARGET_RECOVERY_DEVICE_MODULES ?= init_xiaomi_lahaina
