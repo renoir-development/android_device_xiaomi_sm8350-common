@@ -63,6 +63,7 @@ tda18250.ko
 tda9887.ko
 tea5761.ko
 tea5767.ko
+tfa98xx_dlkm.ko
 tua9001.ko
 tuner-simple.ko
 tuner-types.ko
