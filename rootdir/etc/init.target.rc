@@ -134,6 +134,10 @@ on boot
 
     write /sys/block/sda/queue/wbt_lat_usec 75000
 
+    # Set xiaomi touch permissions
+    chown system system /dev/xiaomi-touch
+    chmod 0660 /dev/xiaomi-touch
+
 on boot && property:ro.boot.product.hardware.sku=nfc
     enable nqnfc_2_0_hal_service
     enable qti_esepowermanager_service_1_1
