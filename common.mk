@@ -164,7 +164,6 @@ PRODUCT_PACKAGES += \
     vendor.display.config@2.0.vendor
 
 PRODUCT_PACKAGES += \
-    gralloc.default \
     libdisplayconfig.qti \
     libqdMetaData \
     libtinyxml \
