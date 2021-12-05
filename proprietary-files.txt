@@ -114,6 +114,9 @@ vendor/lib64/vendor.display.color@1.4.so
 vendor/lib64/vendor.display.color@1.5.so
 vendor/lib64/vendor.display.postproc@1.0.so
 
+# IR
+vendor/lib64/hw/consumerir.lahaina.so
+
 # QMI
 etc/sysconfig/qti_whitelist.xml
 
