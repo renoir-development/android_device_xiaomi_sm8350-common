@@ -24,3 +24,6 @@ allow vendor_mfp-daemon fingerprint_vendor_data_file:file create_file_perms;
 allow vendor_mfp-daemon input_device:dir r_dir_perms;
 allow vendor_mfp-daemon input_device:chr_file rw_file_perms;
 allow vendor_mfp-daemon self:netlink_socket create_socket_perms_no_ioctl;
+allow vendor_mfp-daemon vendor_sysfs_fingerprint:dir r_dir_perms;
+allow vendor_mfp-daemon vendor_sysfs_fingerprint:file rw_file_perms;
+allow vendor_mfp-daemon uhid_device:chr_file rw_file_perms;
