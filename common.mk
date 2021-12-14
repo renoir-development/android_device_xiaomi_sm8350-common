@@ -116,6 +116,7 @@ PRODUCT_PACKAGES += \
     libbthost_if
 
 PRODUCT_PACKAGES += \
+    android.hardware.bluetooth@1.0.vendor \
     android.hardware.bluetooth.audio@2.1-impl \
     com.dsi.ant@1.0.vendor \
     vendor.qti.hardware.bluetooth_audio@2.0.vendor \
@@ -188,6 +189,7 @@ PRODUCT_COPY_FILES += \
 
 # DRM
 PRODUCT_PACKAGES += \
+    android.hardware.drm@1.4.vendor \
     android.hardware.drm@1.4-service.clearkey
 
 # Fastbootd
@@ -210,6 +212,10 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/etc/fstab.qcom:$(TARGET_COPY_OUT_RECOVERY)/root/first_stage_ramdisk/fstab.default \
     $(LOCAL_PATH)/rootdir/etc/fstab.qcom:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.default
 
+# Gatekeeper
+PRODUCT_PACKAGES += \
+    android.hardware.gatekeeper@1.0.vendor
+
 # GPS
 PRODUCT_PACKAGES += \
     android.hardware.gnss@2.1-impl-qti \
@@ -220,6 +226,10 @@ PRODUCT_PACKAGES += \
     libgeofencing \
     libgnss \
     libsensorndkbridge
+
+PRODUCT_PACKAGES += \
+    android.hardware.gnss@1.1.vendor \
+    android.hardware.gnss@2.1.vendor
 
 PRODUCT_PACKAGES += \
     apdr.conf \
@@ -283,6 +293,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.consumerir.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.consumerir.xml
 
+# Keymaster
+PRODUCT_PACKAGES += \
+    android.hardware.keymaster@4.1.vendor
+
 # LiveDisplay
 PRODUCT_PACKAGES += \
     vendor.lineage.livedisplay@2.0-service-sdm
@@ -339,9 +353,18 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.ipsec_tunnels.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.ipsec_tunnels.xml
 
+# Net
+PRODUCT_PACKAGES += \
+    android.system.net.netd@1.1.vendor
+
+# Neural Network
+PRODUCT_PACKAGES += \
+    android.hardware.neuralnetworks@1.3.vendor
+
 # NFC
 PRODUCT_PACKAGES += \
     android.hardware.nfc_snxxx@1.2-service \
+    android.hardware.nfc@1.2.vendor \
     com.android.nfc_extras \
     libchrome.vendor \
     NfcNci \
@@ -374,6 +397,7 @@ PRODUCT_USE_DYNAMIC_PARTITIONS := true
 # Power
 PRODUCT_PACKAGES += \
     android.hardware.power-service-qti \
+    android.hardware.power@1.2.vendor \
     vendor.qti.hardware.perf@2.2.vendor
 
 PRODUCT_COPY_FILES += \
@@ -397,6 +421,9 @@ PRODUCT_PACKAGES += \
 
 # RIL
 PRODUCT_PACKAGES += \
+    android.hardware.radio@1.6.vendor \
+    android.hardware.radio.config@1.3.vendor \
+    android.hardware.radio.deprecated@1.0.vendor \
     CarrierConfigOverlay \
     libjson \
     librmnetctl
