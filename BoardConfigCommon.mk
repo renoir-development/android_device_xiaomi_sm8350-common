@@ -122,24 +122,10 @@ BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD := $(BOOT_KERNEL_MODULES)
 
 # HIDL
 DEVICE_MATRIX_FILE := $(COMMON_PATH)/compatibility_matrix.xml
-DEVICE_FRAMEWORK_MANIFEST_FILE := $(COMMON_PATH)/framework_manifest.xml
-
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
-    $(COMMON_PATH)/framework_compatibility_matrix.xml \
+    $(COMMON_PATH)/device_framework_matrix.xml \
     vendor/lineage/config/device_framework_matrix.xml
-
-DEVICE_MANIFEST_FILE := \
-    $(COMMON_PATH)/manifests/manifest_lahaina.xml \
-    $(COMMON_PATH)/manifests/AHBF@2.1-service.xml \
-    $(COMMON_PATH)/manifests/android.hardware.atrace@1.0-service.xml \
-    $(COMMON_PATH)/manifests/android.hardware.gnss@2.1-service-qti.xml \
-    $(COMMON_PATH)/manifests/android.hardware.neuralnetworks@1.3-service-qti.xml \
-    $(COMMON_PATH)/manifests/c2_manifest_vendor.xml \
-    $(COMMON_PATH)/manifests/fod.xml \
-    $(COMMON_PATH)/manifests/manifest_android.hardware.drm@1.3-service.widevine.xml \
-    $(COMMON_PATH)/manifests/vendor.qti.diag.hal.service.xml \
-    $(COMMON_PATH)/manifests/vendor.qti.gnss@4.0-service.xml \
-    $(COMMON_PATH)/manifests/vendor.qti.hardware.servicetracker@1.2-service.xml
+DEVICE_MANIFEST_FILE := $(COMMON_PATH)/manifest.xml
 
 # Media
 TARGET_USES_ION := true
