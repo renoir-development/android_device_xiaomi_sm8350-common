@@ -167,6 +167,7 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     libdisplayconfig.qti \
+    libdisplayconfig.qti.vendor \
     libqdMetaData \
     libtinyxml \
     memtrack.default
@@ -487,7 +488,8 @@ PRODUCT_COPY_FILES += \
 
 # WiFi Display
 PRODUCT_PACKAGES += \
-    libnl
+    libnl \
+    libwfdaac_vendor
 
-# PRODUCT_BOOT_JARS += \
-#     WfdCommon
+PRODUCT_BOOT_JARS += \
+    WfdCommon
