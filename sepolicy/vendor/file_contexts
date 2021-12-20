@@ -1,6 +1,7 @@
 # Audio
 /dev/socket/audio_hw_socket                                             u:object_r:audio_socket:s0
 /dev/elliptic(.*)?                    u:object_r:sound_device:s0
+/dev/mius(.*)?                        u:object_r:sound_device:s0
 
 # Battery
 /vendor/bin/batteryd		u:object_r:batteryd_exec:s0
@@ -13,20 +14,24 @@
 # IR
 /dev/ir_spi                                      u:object_r:ir_spi_device:s0
 
-# Power
-/sys/devices/virtual/touch/tp_dev/double_tap                       u:object_r:vendor_sysfs_double_tap:s0
+# Mlipay
+/(vendor|system/vendor)/bin/mlipayd@1.1         u:object_r:hal_mlipay_default_exec:s0
 
 # Powershare
 /vendor/bin/hw/vendor\.lineage\.powershare@1\.0-service\.xiaomi_sm8350                           u:object_r:hal_lineage_powershare_default_exec:s0
 
 # Sensors
 /vendor/bin/hw/android\.hardware\.sensors@2.1-service\.xiaomi_sm8350-multihal                           u:object_r:hal_sensors_default_exec:s0
+/sys/bus/iio/devices                                                                                                            u:object_r:vendor_sysfs_iio:s0
+/sys/devices/platform/us_prox.0/iio:device1(/.*)?                                                                               u:object_r:vendor_sysfs_iio:s0
+/sys/devices/platform/soc/c440000.qcom,spmi/spmi-0/spmi0-00/c440000.qcom,spmi:qcom,pmk8350@0:vadc@3100/iio:device0(/.*)?        u:object_r:vendor_sysfs_iio:s0
 
 # Fingerprint
 /dev/goodix_fp                                                      u:object_r:vendor_fingerprint_device:s0
 /mnt/vendor/persist/goodix(/.*)?                                    u:object_r:vendor_fingerprint_data_file:s0
 /data/vendor/fpdump(/.*)?                                           u:object_r:vendor_fingerprint_data_file:s0
 /data/vendor/goodix(/.*)?                                           u:object_r:vendor_fingerprint_data_file:s0
+/data/vendor/fpc(/.*)?                                              u:object_r:vendor_fingerprint_data_file:s0
 /vendor/bin/hw/mfp-daemon                                           u:object_r:vendor_mfp-daemon_exec:s0
 
 # FOD
