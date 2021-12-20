@@ -11,3 +11,7 @@ vendor.panel.display.     u:object_r:vendor_fp_prop:s0
 
 # SPU
 persist.vendor.security.spuari.              u:object_r:vendor_security_spuari_prop:s0
+
+# Mlipay
+persist.vendor.sys.pay.                 u:object_r:mlipay_prop:s0
+persist.vendor.sys.provision.status     u:object_r:mlipay_prop:s0
