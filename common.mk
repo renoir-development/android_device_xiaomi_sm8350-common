@@ -41,6 +41,7 @@ PRODUCT_PACKAGES += \
     libqcompostprocbundle
 
 PRODUCT_PACKAGES += \
+    audioadsprpcd \
     audio.a2dp.default \
     audio.usb.default \
     audio.r_submix.default
