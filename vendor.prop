@@ -127,7 +127,6 @@ vendor.bluetooth.soc=hastings
 
 # Camera
 camera.disable_zsl_mode=true
-vendor.camera.aux.packagelist=org.codeaurora.snapcam,com.android.camera
 
 # CNE
 persist.vendor.cne.feature=1
@@ -166,7 +165,7 @@ debug.sf.latch_unsignaled=1
 debug.sf.set_idle_timer_ms=3000c
 persist.sys.sf.color_mode=0
 persist.sys.sf.color_saturation=1.0
-ro.gfx.driver.1=com.qualcomm.qti.gpudrivers.lahaina.api30
+ro.gfx.driver.0=com.qualcomm.qti.gpudrivers.lahaina.api30
 ro.hardware.egl=adreno
 ro.hardware.vulkan=adreno
 ro.opengles.version=196610
@@ -244,9 +243,6 @@ ro.vendor.se.type=eSE,HCE,UICC
 ro.vendor.extension_library=libqti-perfd-client.so
 ro.vendor.perf.scroll_opt=0
 
-# Priv-app permissions
-ro.control_privapp_permissions=enforce
-
 # Qcom
 ro.vendor.qti.sys.fw.bservice_enable=true
 
@@ -261,6 +257,7 @@ DEVICE_PROVISIONED=1
 keyguard.no_require_sim=true
 persist.radio.multisim.config=dsds
 persist.vendor.data.mode=concurrent
+persist.vendor.data.iwlan.enable=true
 persist.vendor.radio.apm_sim_not_pwdn=1
 persist.vendor.radio.atfwd.start=true
 persist.vendor.radio.custom_ecc=1
@@ -280,7 +277,6 @@ persist.vendor.radio.redir_party_num=1
 persist.vendor.radio.sib16_support=1
 persist.vendor.radio.ucdetect.usb=true
 ril.subscription.types=NV,RUIM
-rild.libpath=/vendor/lib64/libril-qc-hal-qmi.so
 ro.telephony.default_cdma_sub=0
 ro.telephony.default_network=22,22
 ro.telephony.call_ring.multiple=false
@@ -308,10 +304,3 @@ vendor.usb.use_ffs_mtp=1
 
 # Wifi
 wifi.aware.interface=wifi-aware0
-ro.vendor.net.enable_dual_wifi=1
-ro.vendor.net.enable_passpoint_r1=1
-ro.vendor.net.enable_sla=1
-wifi.interface=wlan0
-
-# Wifi Display
-persist.debug.wfd.enable=1
