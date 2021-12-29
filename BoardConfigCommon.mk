@@ -115,8 +115,8 @@ BOARD_KERNEL_CMDLINE += video=vfb:640x400,bpp=32,memsize=3072000
 # Kernel modules
 BOOT_KERNEL_MODULES := \
     hwid.ko \
-    fts_touch_spi.ko \
-    focaltech_touch.ko
+    focaltech_touch.ko \
+    goodix_core.ko
 BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD := $(BOOT_KERNEL_MODULES)
 
 # HIDL
