@@ -26,7 +26,6 @@ media.stagefright.enable-http=true
 media.stagefright.enable-player=true
 media.stagefright.enable-qcp=true
 media.stagefright.enable-scan=true
-mm.enable.smoothstreaming=true
 persist.mm.enable.prefetch=true
 ro.media.recorder-max-base-layer-fps=60
 vendor.mm.enable.qcom_parser=16777215
