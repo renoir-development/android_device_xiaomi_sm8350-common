@@ -481,6 +481,7 @@ vendor/etc/media_lahaina/video_system_specs.json
 vendor/etc/media_shima_v1/video_system_specs.json
 vendor/etc/media/video_system_specs.json
 vendor/etc/video_system_specs.json
+-vendor/etc/vintf/manifest/c2_manifest_vendor.xml
 vendor/etc/seccomp_policy/codec2.vendor.base-arm.policy
 vendor/etc/seccomp_policy/codec2.vendor.ext-arm.policy
 vendor/lib/libqc2vppfilter.so
