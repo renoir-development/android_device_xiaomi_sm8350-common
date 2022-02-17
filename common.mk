@@ -41,12 +41,9 @@ PRODUCT_PACKAGES += \
     libqcompostprocbundle
 
 PRODUCT_PACKAGES += \
-    audio.primary.lahaina \
     audio.a2dp.default \
     audio.usb.default \
-    audio.r_submix.default \
-    libaudio-resampler \
-    libtinycompress
+    audio.r_submix.default
 
 PRODUCT_PACKAGES += \
     android.hardware.audio@6.0-impl:32 \
@@ -55,7 +52,6 @@ PRODUCT_PACKAGES += \
     android.hardware.audio@2.0-service
 
 PRODUCT_PACKAGES += \
-    liba2dpoffload \
     libbatterylistener \
     libcirrusspkrprot \
     libcomprcapture \
