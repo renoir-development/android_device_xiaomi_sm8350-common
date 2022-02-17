@@ -438,10 +438,6 @@ vendor/lib/libqcodec2_v4l2codec.so
 vendor/lib/libmmosal.so
 vendor/lib64/libmmosal.so
 
-# Mink-Lowi Interface daemon
-vendor/bin/mlid
-vendor/lib64/libminksocket.so
-
 # Mlipay
 vendor/bin/mlipayd@1.1
 vendor/etc/init/vendor.xiaomi.hardware.mlipay@1.1-service.rc
