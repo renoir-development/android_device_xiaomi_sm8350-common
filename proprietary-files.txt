@@ -476,7 +476,6 @@ vendor/lib64/libqtikeymaster4.so
 
 # Listen
 vendor/lib/hw/sound_trigger.primary.lahaina.so
-vendor/lib/libadpcmdec.so
 vendor/lib/libcapiv2svacnn.so
 vendor/lib/libcapiv2svarnn.so
 vendor/lib/libcapiv2vop.so
@@ -486,7 +485,6 @@ vendor/lib/libgcs-osal.so
 vendor/lib/libgcs.so
 vendor/lib/liblistensoundmodel2.so
 vendor/lib/libmulawdec.so
-vendor/lib/libsmwrapper.so
 
 # Media
 system_ext/lib/libmmosal.so
