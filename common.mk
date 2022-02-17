@@ -35,18 +35,15 @@ PRODUCT_SHIPPING_API_LEVEL := 30
 
 # Audio
 PRODUCT_PACKAGES += \
-    libvolumelistener \
+    libqcompostprocbundle \
     libqcomvisualizer \
     libqcomvoiceprocessing \
-    libqcompostprocbundle
+    libvolumelistener
 
 PRODUCT_PACKAGES += \
-    audio.primary.lahaina \
     audio.a2dp.default \
-    audio.usb.default \
     audio.r_submix.default \
-    libaudio-resampler \
-    libtinycompress
+    audio.usb.default
 
 PRODUCT_PACKAGES += \
     android.hardware.audio@6.0-impl:32 \
