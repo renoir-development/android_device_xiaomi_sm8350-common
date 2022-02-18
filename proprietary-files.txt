@@ -24,6 +24,7 @@ vendor/lib/soundfx/libshoebox.so
 vendor/lib/libadm.so
 vendor/lib/libqtigef.so
 vendor/lib/libssrec.so
+vendor/lib/libvideoNS.so
 
 vendor/lib/hw/audio.primary.lahaina.so
 vendor/lib/liba2dpoffload.so
