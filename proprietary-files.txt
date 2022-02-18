@@ -29,6 +29,7 @@ vendor/lib/libaudioroute_ext.so
 vendor/lib/libqtigef.so
 vendor/lib/libresampler.so
 vendor/lib/libssrec.so
+vendor/lib/libvideoNS.so
 
 # Bluetooth
 vendor/bin/hw/android.hardware.bluetooth@1.0-service-qti
