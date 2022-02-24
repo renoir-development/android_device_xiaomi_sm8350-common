@@ -1,5 +1,6 @@
 Common_CFlags = ["-Wall"]
 Common_CFlags += ["-Werror"]
+Common_CFlags += ["-DUSE_EFFECT_STREAM"]
 
 cc_library_shared {
     name: "vendor.qti.hardware.vibrator.impl.xiaomi_sm8350",
