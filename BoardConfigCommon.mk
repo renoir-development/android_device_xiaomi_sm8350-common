@@ -66,8 +66,13 @@ TARGET_USES_QTI_CAMERA_DEVICE := true
 # Display
 TARGET_SCREEN_DENSITY := 440
 TARGET_USES_DISPLAY_RENDER_INTENTS := true
-TARGET_USES_GRALLOC4 := true
-TARGET_USES_HWC2 := true
+
+# Display soong
+SOONG_CONFIG_NAMESPACES += qtidisplay
+SOONG_CONFIG_qtidisplay := drmpp headless llvmsa gralloc4 default
+SOONG_CONFIG_qtidisplay_drmpp := true
+SOONG_CONFIG_qtidisplay_gralloc4 := true
+SOONG_CONFIG_qtidisplay_default := true
 
 # Filesystem
 TARGET_FS_CONFIG_GEN := $(COMMON_PATH)/config.fs
