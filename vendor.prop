@@ -214,7 +214,6 @@ persist.mm.enable.prefetch=true
 ro.config.media_vol_default=15
 ro.config.media_vol_steps=25
 ro.config.vc_call_vol_steps=11
-vendor.mm.enable.qcom_parser=16777215
 
 # NFC
 ro.nfc.port=I2C
