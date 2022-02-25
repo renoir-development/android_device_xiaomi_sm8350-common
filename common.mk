@@ -217,9 +217,7 @@ PRODUCT_PACKAGES += \
     android.hidl.manager@1.0.vendor
 
 PRODUCT_PACKAGES += \
-    libhidltransport \
     libhidltransport.vendor \
-    libhwbinder \
     libhwbinder.vendor
 
 # Init scripts
