@@ -160,7 +160,6 @@ vendor/lib64/vendor.display.color@1.5.so
 vendor/lib64/vendor.display.postproc@1.0.so
 
 # DPM
-framework/tcmclient.jar
 system_ext/bin/dpmd
 system_ext/etc/dpm/dpm.conf
 system_ext/etc/init/dpmd.rc
@@ -174,6 +173,7 @@ system_ext/lib64/libdpmfdmgr.so
 system_ext/lib64/libdpmframework.so
 system_ext/lib64/libdpmtcm.so
 -system_ext/priv-app/dpmserviceapp/dpmserviceapp.apk
+system/framework/tcmclient.jar
 vendor/bin/dpmQmiMgr
 vendor/etc/init/dpmQmiMgr.rc
 vendor/lib64/com.qualcomm.qti.dpm.api@1.0.so
@@ -539,7 +539,7 @@ vendor/bin/init.qti.qcv.sh
 vendor/etc/init/init.qti.qcv.rc
 
 # QMI
-etc/sysconfig/qti_whitelist.xml
+system/etc/sysconfig/qti_whitelist.xml
 vendor/bin/irsc_util
 vendor/bin/qmipriod
 vendor/bin/qrtr-lookup
@@ -710,7 +710,7 @@ vendor/lib64/hw/vendor.qti.hardware.soter@1.0-impl.so
 vendor/lib64/vendor.qti.hardware.soter@1.0.so
 
 # Soter service (Tencent)
--app/SoterService/SoterService.apk
+-system/app/SoterService/SoterService.apk
 
 # Thermal
 vendor/bin/mi_thermald
@@ -769,7 +769,6 @@ vendor/etc/wifi/aoa_cldb_falcon.bin
 vendor/etc/wifi/aoa_cldb_swl14.bin
 
 # WiFi Display
--framework/WfdCommon.jar
 system_ext/bin/wfdservice
 system_ext/etc/init/wfdservice.rc
 system_ext/etc/permissions/wfd-system-ext-privapp-permissions-qti.xml
@@ -810,6 +809,7 @@ system_ext/lib/libwfduibcsrcinterface.so
 system_ext/lib/libwfduibcsrc.so
 system_ext/lib/vendor.qti.hardware.wifidisplaysession@1.0.so
 -system_ext/priv-app/WfdService/WfdService.apk
+-system/framework/WfdCommon.jar
 vendor/bin/wfdvndservice
 vendor/bin/wifidisplayhalservice
 vendor/etc/init/com.qualcomm.qti.wifidisplayhal@1.0-service.rc
