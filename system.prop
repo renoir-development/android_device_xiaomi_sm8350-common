@@ -1,5 +1,6 @@
 # Bluetooth
 ro.bluetooth.library_name=libbluetooth_qti.so
+vendor.bluetooth.soc=hastings
 
 # Charger
 ro.charger.enable_suspend=true
@@ -21,8 +22,28 @@ persist.dbg.vt_avail_ovr=1
 persist.dbg.wfc_avail_ovr=1
 
 # Media
+media.aac_51_output_enabled=true
+media.stagefright.enable-aac=true
+media.stagefright.enable-fma2dp=true
+media.stagefright.enable-http=true
+media.stagefright.enable-player=true
+media.stagefright.enable-qcp=true
+media.stagefright.enable-scan=true
+mmp.enable.3g2=true
+persist.demo.hdmirotationlock=false
+persist.mm.enable.prefetch=true
 ro.media.recorder-max-base-layer-fps=60
 vendor.mm.enable.qcom_parser=16777207
 
+# NFC
+ro.nfc.port=I2C
+
 # QC framework value-adds
 ro.vendor.qti.va_aosp.support=1
+
+# Qcom
+ro.vendor.qti.sys.fw.bservice_enable=true
+
+# Radio
+DEVICE_PROVISIONED=1
+ril.subscription.types=NV,RUIM
