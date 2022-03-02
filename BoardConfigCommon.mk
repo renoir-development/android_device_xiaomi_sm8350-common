@@ -113,6 +113,9 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
     vendor/lineage/config/device_framework_matrix.xml
 DEVICE_MANIFEST_FILE := $(COMMON_PATH)/hidl/manifest.xml
 
+DEVICE_MANIFEST_SKUS := lahaina
+DEVICE_MANIFEST_LAHAINA_FILES := $(COMMON_PATH)/hidl/manifest_lahaina.xml
+
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 131072
 BOARD_BOOTIMAGE_PARTITION_SIZE := 201326592
