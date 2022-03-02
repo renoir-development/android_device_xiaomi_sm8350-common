@@ -53,6 +53,7 @@ PRODUCT_PACKAGES += \
     android.hardware.audio.service
 
 PRODUCT_PACKAGES += \
+    liba2dpoffload \
     libbatterylistener \
     libcirrusspkrprot \
     libcomprcapture \
