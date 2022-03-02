@@ -1,0 +1,24 @@
+type vendor_fingerprint_data_file, data_file_type, file_type;
+type vendor_fingerprint_device, dev_type;
+type vendor_fp_prop, vendor_public_property_type, vendor_property_type, property_type;
+type vendor_fp_info_prop, vendor_public_property_type, vendor_property_type, property_type;
+type vendor_hal_fingerprint_hwservice_xiaomi, hwservice_manager_type;
+
+hal_server_domain(hal_fingerprint_default, hal_fingerprint)
+init_daemon_domain(hal_fingerprint_default)
+add_hwservice(hal_fingerprint_default, vendor_hal_fingerprint_hwservice_xiaomi)
+
+set_prop(hal_fingerprint_default, vendor_fp_prop)
+set_prop(hal_fingerprint_default, vendor_fp_info_prop)
+
+allow hal_fingerprint_default vendor_hal_perf_hwservice:hwservice_manager { find };
+
+allow hal_fingerprint_default vendor_fingerprint_data_file:dir create_dir_perms;
+allow hal_fingerprint_default vendor_fingerprint_data_file:file create_file_perms;
+allow hal_fingerprint_default tee_device:chr_file rw_file_perms;
+allow hal_fingerprint_default vendor_fingerprint_device:chr_file rwx_file_perms;
+allow hal_fingerprint_default fingerprint_vendor_data_file:dir create_dir_perms;
+allow hal_fingerprint_default fingerprint_vendor_data_file:file create_file_perms;
+allow hal_fingerprint_default input_device:dir r_dir_perms;
+allow hal_fingerprint_default input_device:chr_file rw_file_perms;
+allow hal_fingerprint_default self:netlink_socket create_socket_perms_no_ioctl;
