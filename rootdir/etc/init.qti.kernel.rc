@@ -68,7 +68,7 @@ on boot
     write /sys/block/sde/queue/iosched/slice_idle 0
     write /sys/block/sdf/queue/iosched/slice_idle 0
 
-service kernel-post-boot /vendor/bin/sh /vendor/bin/init.kernel.post_boot-lahaina.sh
+service kernel-post-boot /vendor/bin/sh /vendor/bin/init.kernel.post_boot.sh
     class core
     user root
     group root system wakelock graphics
