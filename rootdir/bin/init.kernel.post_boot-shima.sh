@@ -100,7 +100,6 @@ function configure_memory_parameters() {
 	ProductName=`getprop ro.product.name`
 
 	configure_zram_parameters
-	echo 0 > /proc/sys/vm/page-cluster
 	echo 100 > /proc/sys/vm/swappiness
 
         # Disable wsf  beacause we are using efk.

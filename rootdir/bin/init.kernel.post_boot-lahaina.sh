@@ -98,7 +98,6 @@ function configure_memory_parameters() {
 	#
 
 	configure_zram_parameters
-	echo 0 > /proc/sys/vm/page-cluster
 	echo 100 > /proc/sys/vm/swappiness
 	echo 1 > /proc/sys/vm/watermark_scale_factor
 	echo 0 > /proc/sys/vm/watermark_boost_factor
