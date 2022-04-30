@@ -27,3 +27,6 @@ allow hal_fingerprint_default uhid_device:chr_file rw_file_perms;
 # Data
 allow hal_fingerprint_default vendor_fingerprint_data_file:dir rw_dir_perms;
 allow hal_fingerprint_default vendor_fingerprint_data_file:file create_file_perms;
+
+# Fod
+get_prop(hal_fingerprint_default, vendor_fod_prop);
