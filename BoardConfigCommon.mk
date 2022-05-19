@@ -84,6 +84,10 @@ DEVICE_MANIFEST_FILE := \
     $(COMMON_PATH)/hidl/manifest_lineage.xml \
     $(COMMON_PATH)/hidl/manifest_xiaomi.xml
 
+# Init
+TARGET_INIT_VENDOR_LIB ?= //$(COMMON_PATH):init_xiaomi_lahaina
+TARGET_RECOVERY_DEVICE_MODULES ?= init_xiaomi_lahaina
+
 # Kernel
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_IMAGE_NAME := Image
