@@ -100,7 +100,22 @@ function configure_memory_parameters() {
 	configure_zram_parameters
 	echo 100 > /proc/sys/vm/swappiness
 	echo 1 > /proc/sys/vm/watermark_scale_factor
-	echo 0 > /proc/sys/vm/watermark_boost_factor
+
+	# add memory limit to camera cgroup
+	MemTotalStr=`cat /proc/meminfo | grep MemTotal`
+	MemTotal=${MemTotalStr:16:8}
+
+	if [ $MemTotal -gt 8388608 ]; then
+		let LimitSize=838860800
+	else
+		let LimitSize=524288000
+	fi
+
+	echo $LimitSize > /dev/memcg/camera/provider/memory.soft_limit_in_bytes
+
+	if [ $MemTotal -le 8388608 ]; then
+		echo 0 > /proc/sys/vm/watermark_boost_factor
+	fi
 }
 
 rev=`cat /sys/devices/soc0/revision`
@@ -178,7 +193,7 @@ fi
 echo 120 > /sys/devices/system/cpu/cpu_boost/input_boost_ms
 
 # configure powerkey boost settings
-echo "0:0 1:0 2:0 3:0 4:2016000 5:0 6:0 7:0" > /sys/devices/system/cpu/cpu_boost/powerkey_input_boost_freq
+echo "0:1804800 1:0 2:0 3:0 4:2419200 5:0 6:0 7:2841600" > /sys/devices/system/cpu/cpu_boost/powerkey_input_boost_freq
 echo 400 > /sys/devices/system/cpu/cpu_boost/powerkey_input_boost_ms
 
 # configure governor settings for gold cluster
