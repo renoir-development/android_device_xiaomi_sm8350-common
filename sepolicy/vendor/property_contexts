@@ -1,5 +1,4 @@
 # Camera
-camera.                  u:object_r:vendor_camera_prop:s0
 persist.camera.          u:object_r:vendor_camera_prop:s0
 persist.vendor.camera    u:object_r:vendor_camera_prop:s0
 vendor.camera.sensor.    u:object_r:vendor_camera_sensor_prop:s0
@@ -15,7 +14,3 @@ ro.gfx.driver.1          u:object_r:exported3_default_prop:s0
 
 # SPU
 persist.vendor.security.spuari.              u:object_r:vendor_security_spuari_prop:s0
-
-# Mlipay
-persist.vendor.sys.pay.                 u:object_r:mlipay_prop:s0
-persist.vendor.sys.provision.status     u:object_r:mlipay_prop:s0
