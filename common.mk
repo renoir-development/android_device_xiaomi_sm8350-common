@@ -52,7 +52,6 @@ PRODUCT_PACKAGES += \
     android.hardware.soundtrigger@2.2-impl
 
 PRODUCT_PACKAGES += \
-    liba2dpoffload \
     libbatterylistener \
     libhdmiedid \
     libhfp \
