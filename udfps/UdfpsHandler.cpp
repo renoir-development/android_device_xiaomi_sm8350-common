@@ -6,13 +6,14 @@
 
 #define LOG_TAG "UdfpsHandler.xiaomi_sm8350"
 
-#include "UdfpsHandler.h"
-
 #include <android-base/logging.h>
+
 #include <fcntl.h>
+#include <fstream>
 #include <poll.h>
-#include <unistd.h>
 #include <thread>
+
+#include "UdfpsHandler.h"
 
 // Fingerprint hwmodule commands
 #define COMMAND_NIT 10
@@ -29,6 +30,7 @@
 #define FOD_STATUS_OFF 0
 #define FOD_STATUS_ON 1
 
+template <typename T>
 static void set(const std::string& path, const T& value) {
     std::ofstream file(path);
     file << value;
@@ -85,7 +87,6 @@ class XiaomiUdfpsHander : public UdfpsHandler {
                     mDevice->extCmd(mDevice, COMMAND_NIT, PARAM_NIT_NONE);
                     set(FOD_HBM_PATH, FOD_HBM_OFF);
                     set(FOD_STATUS_PATH, FOD_STATUS_OFF);
-                }
                 }
             }
         }).detach();
