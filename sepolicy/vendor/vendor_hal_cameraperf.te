@@ -1,0 +1,10 @@
+type vendor_hal_cameraperf_hwservice, hwservice_manager_type, protected_hwservice;
+
+hal_server_domain(hal_camera_default, vendor_hal_cameraperf)
+hal_attribute_hwservice(hal_camera, vendor_hal_cameraperf_hwservice)
+
+binder_call(vendor_hal_cameraperf_client, vendor_hal_cameraperf_server)
+binder_call(vendor_hal_cameraperf_server, vendor_hal_cameraperf_client)
+
+# This neverallows but somehow xiaomi did that on stock?
+#hal_attribute_hwservice(vendor_hal_cameraperf, vendor_hal_cameraperf_hwservice)
